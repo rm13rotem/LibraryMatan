@@ -12,6 +12,7 @@ namespace LibraryMatan.Controllers
     public class BooksController : Controller
     {
         private readonly LibraryMatanContext _context;
+        private readonly OrderRepository orderRepository = new OrderRepository();
 
         public BooksController(LibraryMatanContext context)
         {
@@ -21,7 +22,8 @@ namespace LibraryMatan.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Book.ToListAsync());
+            var newBooks = await _context.Book.Where(x => x.CreatedDateTime > DateTime.Now.AddMonths(-1)).ToListAsync();
+            return View(newBooks);
         }
 
         // GET: Books/Details/5
@@ -43,8 +45,29 @@ namespace LibraryMatan.Controllers
         }
 
         // GET: Books/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
+            ViewBag.GenreId = await _context.Genre.ToListAsync();
+            return View();
+        }
+        public async Task<IActionResult> CreateAndDo(OrderRequestViewModel model)
+        {
+
+            ViewBag.GenreId = await _context.Genre.ToListAsync();
+            ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAndDo(Book book, int ActionToDo, int memberId)
+        {
+            if (book.IsValid() && ActionToDo > 0)
+            {
+                orderRepository.InsertOrder(book, ActionToDo, memberId);
+                return RedirectToAction("BeingProcessed");
+            }
+            ViewBag.GenreId = await _context.Genre.ToListAsync();
+            ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
             return View();
         }
 
@@ -55,7 +78,7 @@ namespace LibraryMatan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,VerifiedNameId,VerifiedAuthorId,Author,Price,RequestedTimes,GenreId,CreatedDateTime")] Book book)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && book.IsValid())
             {
                 _context.Add(book);
                 await _context.SaveChangesAsync();

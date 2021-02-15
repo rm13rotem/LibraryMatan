@@ -19,7 +19,10 @@ namespace LibraryMatan.Models
         public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<MembershipUser> MembershipUser { get; set; }
         public virtual DbSet<VerifiedAuthor> VerifiedAuthor { get; set; }
-        public virtual DbSet<VerifiedBookTitle> VerifiedBookTitle {get; set;}
+        public virtual DbSet<VerifiedBookTitle> VerifiedBookTitle { get; set; }
+        public virtual DbSet<OrderRequest> OrderRequest { get; set; }
+        public virtual DbSet<OrderRequestStatusDescription> OrderRequestStatusDescription { get; set; }
+        public virtual DbSet<OrderRequestTypeDescription> OrderRequestTypeDescription { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,7 +30,7 @@ namespace LibraryMatan.Models
             {
                 //string connName = "Dev";
                 //optionsBuilder.UseSqlServer("DevConnection");
-                
+
             }
         }
 
@@ -52,19 +55,52 @@ namespace LibraryMatan.Models
                     .HasDefaultValueSql("((10))");
             });
 
-
-            modelBuilder.Entity<VerifiedBookTitle>(entity =>
+            modelBuilder.Entity<OrderRequest>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.OrderRequestTypeId).HasColumnName("OrderRequestTypeId");
+
+                entity.Property(e => e.BookId);
+                entity.Property(e => e.MembershipId);
+                entity.Property(e => e.StatusId);
                 entity.Property(e => e.CreatedDateTime)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.FreeBookText)
                     .IsRequired()
                     .HasMaxLength(500);
+
             });
+
+            modelBuilder.Entity<OrderRequestTypeDescription>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.DescriptionText).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<OrderRequestStatusDescription>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.DescriptionText).HasMaxLength(500);
+            });
+
+
+            modelBuilder.Entity<VerifiedBookTitle>(entity =>
+    {
+        entity.Property(e => e.Id).HasColumnName("id");
+
+        entity.Property(e => e.CreatedDateTime)
+            .HasColumnType("datetime")
+            .HasDefaultValueSql("(getdate())");
+
+        entity.Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(500);
+    });
 
             modelBuilder.Entity<Genre>(entity =>
             {
