@@ -6,6 +6,7 @@ namespace LibraryMatan.Models
     public partial class MembershipUser
     {
         public int Id { get; set; }
+        
         public string UserNameText { get; set; }
         public string UserIdentityNumber { get; set; }
 

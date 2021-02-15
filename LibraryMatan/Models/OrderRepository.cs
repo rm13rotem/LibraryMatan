@@ -7,22 +7,45 @@ namespace LibraryMatan.Models
 {
     public class OrderRepository : InMemoryRepository<OrderRequest>
     {
-        public void InsertOrder(Book book, int actionToDo, int memberId)
+        public OrderRepository(LibraryMatanContext _db) : base(_db)
         {
-            OrderRequest newOrderRequest = new OrderRequest()
+
+        }
+
+        private List<OrderRequestViewModel> _myViewModelList { get; set; }
+        public void InsertOrder(OrderRequestViewModel model)
+        {
+            OrderRequest newOrderRequest = model.ToOrderRequest();
+
+            var allLines = GetAll();
+            var requestExists = allLines.FirstOrDefault(x => x.FreeBookText.Contains(model.Name));
+            if (requestExists == null)
+                requestExists = allLines.FirstOrDefault(x => x.FreeBookText.Contains(model.Author));
+            if (requestExists == null || requestExists.OrderRequestTypeId != model.ActionToDo)
             {
-                FreeBookText = book.Name,
-                OrderRequestTypeId = actionToDo, StatusId = 1, MembershipId = memberId
-            };
-            InMemoryRepository<OrderRequest> repository = new InMemoryRepository<OrderRequest>();
-            var requestExists = repository.GetAll().FirstOrDefault(x => x.FreeBookText.Contains(book.Name));
-            if (requestExists == null || requestExists.OrderRequestTypeId != actionToDo)
-            {
-                repository.TryInsert(newOrderRequest);
+                TryInsert(newOrderRequest);
                 return;
             }
             // else;
             return; // already exists;
+        }
+
+        public List<OrderRequestViewModel> GetAllViewModel()
+        {
+            if (_myViewModelList != null && _myViewModelList.Any() && _lastCached > DateTime.UtcNow.AddDays(-1))
+                return _myViewModelList;
+            //else
+            var all = GetAll().Where(x => x.CreatedDateTime > DateTime.Now.AddMonths(-1))
+                .Select(x => new OrderRequestViewModel()
+                {
+                    ActionToDo = x.OrderRequestTypeId,
+                    MembershipId = x.MembershipId,
+                    Name = x.FreeBookText,
+                    Id = x.Id, 
+                    StatusId = x.StatusId
+                }).ToList();
+            _myViewModelList = all;
+            return all;
         }
     }
 }

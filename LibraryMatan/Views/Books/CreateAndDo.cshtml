@@ -10,18 +10,25 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateAndDo">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>
+                <span dir="rtl">
+                    ברוך הבא
+                    @ViewBag.Name
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">זאנר</label>
                 @Html.DropDownList("GenreId", new SelectList(ViewBag.GenreId, "Id", "GenreName"))
                 <span asp-validation-for="GenreId" class="text-danger"></span> @Html.ActionLink("הוסף זאנר חדש", "Create", "Genres")
             </div>
             <div class="form-group">
-                <label asp-for="ActionToDo" class="control-label"></label>
+                <labelclass="control-label">מה ברצונך לעשות?</label>
                 @Html.DropDownList("ActionToDo", new SelectList(ViewBag.ActionToDo, "Id", "DescriptionText"))
                 <span asp-validation-for="ActionToDo" class="text-danger"></span>
             </div>
+            <input asp-for="MembershipId" class="hide" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,11 +39,7 @@
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>
-                @Html.DropDownList("GenreId", new SelectList(ViewBag.GenreId, "Id", "GenreName"))
-                <span asp-validation-for="GenreId" class="text-danger"></span> @Html.ActionLink("הוסף זאנר חדש", "Create", "Genres")
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

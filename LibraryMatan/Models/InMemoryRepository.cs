@@ -18,9 +18,15 @@ namespace LibraryMatan.Models
     public class InMemoryRepository<T> : IRepository<T>
         where T:class
     {
-        private LibraryMatanContext db = new LibraryMatanContext();
+        private LibraryMatanContext db;
         private static List<T> _mylist = null;
-        private static DateTime _lastCached;
+        public static DateTime _lastCached;
+
+        public InMemoryRepository(LibraryMatanContext _db)
+        {
+            db = _db;
+        }
+
         public void Dispose()
         {
             db.Dispose();

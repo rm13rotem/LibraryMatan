@@ -1,0 +1,60 @@
+﻿@model IEnumerable<LibraryMatan.Models.OrderRequestViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="CreateAndDo" asp-controller="Books">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MembershipId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionToDo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MembershipId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActionToDo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusId)
+                </td>
+                <td>
+                    <a asp-action="Authorize" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Deny" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Discuss" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

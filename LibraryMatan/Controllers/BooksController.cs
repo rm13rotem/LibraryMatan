@@ -12,11 +12,12 @@ namespace LibraryMatan.Controllers
     public class BooksController : Controller
     {
         private readonly LibraryMatanContext _context;
-        private readonly OrderRepository orderRepository = new OrderRepository();
+        private readonly OrderRepository orderRepository;
 
         public BooksController(LibraryMatanContext context)
         {
             _context = context;
+            orderRepository = new OrderRepository(context);
         }
 
         // GET: Books
@@ -50,24 +51,39 @@ namespace LibraryMatan.Controllers
             ViewBag.GenreId = await _context.Genre.ToListAsync();
             return View();
         }
-        public async Task<IActionResult> CreateAndDo(OrderRequestViewModel model)
+        public async Task<IActionResult> CreateAndDo(MembershipUser membershipUser)
         {
-
+            OrderRequestViewModel model = new OrderRequestViewModel();
+            model.MembershipId = membershipUser.Id;
+            ViewBag.Name = membershipUser.UserNameText;
             ViewBag.GenreId = await _context.Genre.ToListAsync();
             ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAndDo(Book book, int ActionToDo, int memberId)
+        public async Task<IActionResult> CreateAndDo(OrderRequestViewModel model)
         {
-            if (book.IsValid() && ActionToDo > 0)
+            if (model.ToBook().IsValid() && model.ActionToDo > 0)
             {
-                orderRepository.InsertOrder(book, ActionToDo, memberId);
+                // Insert book
+                var newBook = model.ToBook();
+                _context.Add(newBook);
+                await _context.SaveChangesAsync();
+
+                // Insert order
+                orderRepository.InsertOrder(model);
+                var entered = orderRepository.GetAll().First(x => x.FreeBookText == model.Name);
+                entered.BookId = newBook.Id;
+                orderRepository.TryUpdate(entered);
                 return RedirectToAction("BeingProcessed");
             }
             ViewBag.GenreId = await _context.Genre.ToListAsync();
             ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
+            return View();
+        }
+        public IActionResult BeingProcessed()
+        {
             return View();
         }
 
