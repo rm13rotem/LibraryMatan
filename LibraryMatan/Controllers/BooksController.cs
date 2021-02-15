@@ -13,18 +13,33 @@ namespace LibraryMatan.Controllers
     {
         private readonly LibraryMatanContext _context;
         private readonly OrderRepository orderRepository;
+        private readonly InMemoryRepository<Book> booksRepository;
+        private readonly InMemoryRepository<Genre> genreRepository;
 
         public BooksController(LibraryMatanContext context)
         {
             _context = context;
             orderRepository = new OrderRepository(context);
+            booksRepository = new InMemoryRepository<Book>(context);
+            genreRepository = new InMemoryRepository<Genre>(context);
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public  IActionResult Index(BookSearchFilter filter)
         {
-            var newBooks = await _context.Book.Where(x => x.CreatedDateTime > DateTime.Now.AddMonths(-1)).ToListAsync();
-            return View(newBooks);
+            var newBooks = booksRepository.GetAll().ToList();
+            if (!string.IsNullOrWhiteSpace(filter.Text))
+                newBooks = newBooks.Where(x => x.Name.Contains(filter.Text)).ToList();
+            else if (!string.IsNullOrWhiteSpace(filter.Author))
+                newBooks = newBooks.Where(x => x.Author.Contains(filter.Author)).ToList();
+            else if (filter.GenreId > 0)
+                newBooks = newBooks.Where(x => x.GenreId == filter.GenreId).ToList();
+            else newBooks = newBooks.Where(x => x.CreatedDateTime > DateTime.Now.AddMonths(-1)).ToList();
+            filter.Result = newBooks;
+            var genres = genreRepository.GetAll().ToList();
+            genres.Add(new Genre() { Id = 0, GenreName = "ללא סינון" });
+            ViewBag.GenreId = genres;
+            return View(filter);
         }
 
         // GET: Books/Details/5
@@ -46,9 +61,9 @@ namespace LibraryMatan.Controllers
         }
 
         // GET: Books/Create
-        public async Task<IActionResult> CreateAsync()
+        public IActionResult Create()
         {
-            ViewBag.GenreId = await _context.Genre.ToListAsync();
+            ViewBag.GenreId = genreRepository.GetAll();
             return View();
         }
         public async Task<IActionResult> CreateAndDo(MembershipUser membershipUser)

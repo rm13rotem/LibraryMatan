@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LibraryMatan.Models.Book>
+﻿@model BookSearchFilter
 
 @{
     ViewData["Title"] = "Index";
@@ -9,60 +9,65 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">שם</label>
+                <input asp-for="Text" class="form-control" />
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">מחבר</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">זאנר</label>
+                @Html.DropDownList("GenreId", new SelectList(ViewBag.GenreId, "Id", "GenreName", Model.GenreId))
+            </div>
+            <div class="form-group">
+                <input type="submit" value="סנן" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+               שם הספר
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VerifiedNameId)
+                מחבר
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VerifiedAuthorId)
+                מספר בקשות
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+               זאנר
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RequestedTimes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GenreId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDateTime)
+                נוצר
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Result) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.VerifiedNameId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VerifiedAuthorId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RequestedTimes)
             </td>
             <td>
-                @Html.DropDownList("GenreId", new SelectList(ViewBag.GenreId, "Id", "GenreName", item.GenreId))
+                @Html.DropDownListFor(modelItem => item.GenreId, new SelectList(ViewBag.GenreId, "Id", "GenreName", item.GenreId))
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDateTime)
