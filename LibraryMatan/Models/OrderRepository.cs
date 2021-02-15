@@ -7,9 +7,22 @@ namespace LibraryMatan.Models
 {
     public class OrderRepository : InMemoryRepository<OrderRequest>
     {
-        internal void InsertOrder(Book book, int actionToDo, int memberId)
+        public void InsertOrder(Book book, int actionToDo, int memberId)
         {
-            throw new NotImplementedException();
+            OrderRequest newOrderRequest = new OrderRequest()
+            {
+                FreeBookText = book.Name,
+                OrderRequestTypeId = actionToDo, StatusId = 1, MembershipId = memberId
+            };
+            InMemoryRepository<OrderRequest> repository = new InMemoryRepository<OrderRequest>();
+            var requestExists = repository.GetAll().FirstOrDefault(x => x.FreeBookText.Contains(book.Name));
+            if (requestExists == null || requestExists.OrderRequestTypeId != actionToDo)
+            {
+                repository.TryInsert(newOrderRequest);
+                return;
+            }
+            // else;
+            return; // already exists;
         }
     }
 }
