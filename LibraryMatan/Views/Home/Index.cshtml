@@ -1,6 +1,15 @@
 ﻿
+@{ 
+    ViewBag.Title = "Home";
+}
 
 <div class="text-center">
     <h1 class="display-4">ברוכים הבאים לאתר הלא רשמי של ספריית מתן</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <ol>
+        <li>@Html.ActionLink("משתמש חדש", "Create", "MembershipUsers", null)</li>
+        <li>@Html.ActionLink("משתמש קיים", "Login", "Account", null)</li>
+        <li>@Html.ActionLink("ביצוע פעולה", "OrderABook", "Orders", null)</li>
+        <li>@Html.ActionLink("חיפוש ספר", "Login", "Account", null)</li>
+        <li>@Html.ActionLink("צור קשר", "Privacy", "Home", null)</li>
+    </ol>
 </div>
