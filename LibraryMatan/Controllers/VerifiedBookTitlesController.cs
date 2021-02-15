@@ -18,6 +18,11 @@ namespace LibraryMatan.Controllers
             _context = context;
         }
 
+        public ActionResult Verify(Book model)
+        {
+            //_context.VerifiedBookTitle.get
+            return View("Index");
+        }
         // GET: VerifiedBookTitles
         public async Task<IActionResult> Index()
         {

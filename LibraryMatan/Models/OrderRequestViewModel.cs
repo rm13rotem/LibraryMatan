@@ -12,6 +12,7 @@ namespace LibraryMatan.Models
         public int? GenreId { get; set; }
         public int ActionToDo { get; set; }
         public int StatusId { get; set; }
+        public int MembershipId { get; set; }
 
         public OrderRequest ToOrderRequest()
         {
@@ -24,7 +25,6 @@ namespace LibraryMatan.Models
             };
         }
 
-        public int MembershipId { get; internal set; }
 
         public Book ToBook()
         {

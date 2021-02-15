@@ -61,14 +61,14 @@
                 @Html.DisplayFor(modelItem => item.RequestedTimes)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GenreId)
+                @Html.DropDownList("GenreId", new SelectList(ViewBag.GenreId, "Id", "GenreName", item.GenreId))
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDateTime)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @Html.ActionLink("קיים בספריה", "Verify", "VerifiedBookTitles", item) |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

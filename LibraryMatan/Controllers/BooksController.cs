@@ -55,7 +55,7 @@ namespace LibraryMatan.Controllers
         {
             OrderRequestViewModel model = new OrderRequestViewModel();
             model.MembershipId = membershipUser.Id;
-            ViewBag.Name = membershipUser.UserNameText;
+            ViewBag.MembershipId = new List<MembershipUser>() { membershipUser };
             ViewBag.GenreId = await _context.Genre.ToListAsync();
             ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
             return View(model);

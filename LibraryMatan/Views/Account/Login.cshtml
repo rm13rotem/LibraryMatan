@@ -8,24 +8,21 @@
             <form asp-action="Login">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="UserNameText" class="control-label"></label>
+                    <label class="control-label">שם</label>
                     <input asp-for="UserNameText" class="form-control" />
                     <span asp-validation-for="UserNameText" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="UserIdentityNumber" class="control-label"></label>
+                    <label class="control-label">תעודת זהות</label>
                     <input asp-for="UserIdentityNumber" class="form-control" />
                     <span asp-validation-for="UserIdentityNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="כניסה וביצוע פעולה" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
 
 </div>
