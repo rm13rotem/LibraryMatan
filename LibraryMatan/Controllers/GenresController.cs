@@ -18,6 +18,7 @@ namespace LibraryMatan.Controllers
         {
             _context = context;
             genreRepo = new InMemoryRepository<Genre>(_context);
+            genreRepo.GetAll();
         }
 
 
@@ -25,7 +26,7 @@ namespace LibraryMatan.Controllers
         public async Task<IActionResult> Refresh()
         {
             genreRepo.RefreshIfStale(true);
-            return View("Index");
+            return RedirectToAction("Index");
         }
         // GET: Genres
         public async Task<IActionResult> Index()
