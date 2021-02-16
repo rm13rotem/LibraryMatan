@@ -38,7 +38,7 @@ namespace LibraryMatan.Models
             if (_mylist == null || _lastCached < DateTime.UtcNow.AddDays(-1) ||
                 forceRefreshing == true)
             {
-                var newList = db.Set<T>().ToList();
+               var newList = db.Set<T>().ToList();
                 _mylist = newList;
                 _lastCached = DateTime.UtcNow;
             }

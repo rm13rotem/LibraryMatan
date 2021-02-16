@@ -26,9 +26,18 @@ namespace LibraryMatan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            var env = Configuration.GetValue<string>("Environment");
 
-            services.AddDbContext<LibraryMatanContext>(options =>
-            options.UseSqlServer("Server=LAPTOP-6ORP7UKE\\SQLEXPRESS;Database=LibraryMatan;Trusted_Connection=True;"));
+            if (env == "Dev")
+            {
+                services.AddDbContext<LibraryMatanContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            }
+            else
+            {
+                services.AddDbContext<LibraryMatanContext>(options =>
+                       options.UseSqlServer(Configuration.GetConnectionString("ProdConnection")));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
