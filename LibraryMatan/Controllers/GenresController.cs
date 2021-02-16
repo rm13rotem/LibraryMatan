@@ -12,16 +12,25 @@ namespace LibraryMatan.Controllers
     public class GenresController : Controller
     {
         private readonly LibraryMatanContext _context;
+        private readonly InMemoryRepository<Genre> genreRepo;
 
         public GenresController(LibraryMatanContext context)
         {
             _context = context;
+            genreRepo = new InMemoryRepository<Genre>(_context);
         }
 
+
+        // GET: Genres
+        public async Task<IActionResult> Refresh()
+        {
+            genreRepo.RefreshIfStale(true);
+            return View("Index");
+        }
         // GET: Genres
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Genre.ToListAsync());
+            return View(genreRepo.GetAll());
         }
 
         // GET: Genres/Details/5
