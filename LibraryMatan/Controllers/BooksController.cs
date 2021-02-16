@@ -24,6 +24,13 @@ namespace LibraryMatan.Controllers
             genreRepository = new InMemoryRepository<Genre>(context);
         }
 
+        public IActionResult Refresh()
+        {
+            booksRepository.RefreshIfStale(true);
+
+            return RedirectToAction("Index");
+        }
+
         // GET: Books
         public  IActionResult Index(BookSearchFilter filter)
         {

@@ -106,8 +106,8 @@ namespace LibraryMatan.Controllers
             {
                 try
                 {
-                    _context.Update(genre);
-                    await _context.SaveChangesAsync();
+                    if(genreRepo.TryUpdate(genre))
+                        return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
