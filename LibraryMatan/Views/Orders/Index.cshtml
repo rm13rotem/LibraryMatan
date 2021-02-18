@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LibraryMatan.Models.OrderRequestViewModel>
+﻿@model IEnumerable<LibraryMatan.Models.OrderDisplayViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -50,9 +50,9 @@
                     @Html.DisplayFor(modelItem => item.StatusId)
                 </td>
                 <td>
-                    <a asp-action="Authorize" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Deny" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Discuss" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Authorize" asp-route-id="@item.Id">Authorize</a> |
+                    <a asp-action="Deny" asp-route-id="@item.Id">Deny</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }

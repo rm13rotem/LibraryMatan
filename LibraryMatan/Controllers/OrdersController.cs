@@ -22,7 +22,7 @@ namespace LibraryMatan.Controllers
         // GET: Books
         public IActionResult Index()
         {
-            List<OrderRequestViewModel> newOrders = orderRepository.GetAllViewModel();
+            List < OrderDisplayViewModel> newOrders = orderRepository.GetAllViewModel();
             return View(newOrders);
         }
         // GET: Books
@@ -47,5 +47,35 @@ namespace LibraryMatan.Controllers
 
             return View("Index");
         }
+
+        // GET: VerifiedAuthors/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var orderRequest = await _context.OrderRequest
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (orderRequest == null)
+            {
+                return NotFound();
+            }
+
+            return View(orderRequest);
+        }
+
+        // POST: VerifiedAuthors/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var orderRequest = await _context.OrderRequest.FindAsync(id);
+            _context.OrderRequest.Remove(orderRequest);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
