@@ -32,6 +32,10 @@ namespace LibraryMatan.Models
             db.Dispose();
         }
 
+        public void SaveChanges()
+        {
+            db.SaveChanges();
+        }
 
         public void RefreshIfStale(bool forceRefreshing = false)
         {

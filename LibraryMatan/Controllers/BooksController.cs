@@ -24,15 +24,9 @@ namespace LibraryMatan.Controllers
             genreRepository = new InMemoryRepository<Genre>(context);
         }
 
-        public IActionResult Refresh()
-        {
-            booksRepository.RefreshIfStale(true);
-
-            return RedirectToAction("Index");
-        }
 
         // GET: Books
-        public  IActionResult Index(BookSearchFilter filter)
+        public IActionResult Index(BookSearchFilter filter)
         {
             var newBooks = booksRepository.GetAll().ToList();
             if (!string.IsNullOrWhiteSpace(filter.Text))
@@ -50,15 +44,15 @@ namespace LibraryMatan.Controllers
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            var book = await _context.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Book book = booksRepository.GetByID(id);
+
             if (book == null)
             {
                 return NotFound();
@@ -73,6 +67,7 @@ namespace LibraryMatan.Controllers
             ViewBag.GenreId = genreRepository.GetAll();
             return View();
         }
+
         public async Task<IActionResult> CreateAndDo(MembershipUser membershipUser)
         {
             OrderRequestViewModel model = new OrderRequestViewModel();
@@ -88,8 +83,15 @@ namespace LibraryMatan.Controllers
         {
             if (model.ToBook().IsValid() && model.ActionToDo > 0)
             {
-                // Insert book
+                //Does book exist?
                 var newBook = model.ToBook();
+                var exists = booksRepository.GetAll().
+                    FirstOrDefault(x => x.Author.ToLower() == newBook.Author.ToLower() || x.Name.ToLower() == newBook.Name.ToLower());
+                if (exists != null && model.ActionToDo == 1)
+                    return RedirectToAction("VoteUpSingleBook", "BookManagement", exists);
+                
+                //else
+                // Insert book
                 _context.Add(newBook);
                 await _context.SaveChangesAsync();
 
@@ -104,6 +106,7 @@ namespace LibraryMatan.Controllers
             ViewBag.ActionToDo = await _context.OrderRequestTypeDescription.ToListAsync();
             return View();
         }
+
         public IActionResult BeingProcessed()
         {
             return View();
