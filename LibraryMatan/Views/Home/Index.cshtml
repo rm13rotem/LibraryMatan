@@ -1,12 +1,49 @@
 ﻿
-@{ 
+@{
     ViewBag.Title = "Home";
 }
 
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
 <div class="text-center">
     <h1 class="display-4">ברוכים הבאים לאתר של ספריית מתן</h1>
-    <ul>
-        <li class="one">@Html.ActionLink("משתמש חדש", "Create", "MembershipUsers", null)</li>
+    <ul style="list-style-type:none">
+        <li>
+            <button type="button" class="btn btn-lg btn-info" onclick="document.location='Books/Index'">
+                <span class="glyphicon glyphicon-search"></span> חיפוש ספר
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-info" asp-action="Create" asp-controller="MembershipUsers">
+                <span class="glyphicon glyphicon-plus"></span> משתמש חדש
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-info" asp-action="Login" asp-controller="Account">
+                <span class="glyphicon glyphicon-user"></span> בצע Login
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-info" asp-action="Index" asp-controller="Books">
+                <span class="glyphicon glyphicon-search"></span> Search Books
+            </button>
+        </li>
+        <li>
+            <button type="button" class="btn btn-info" asp-action="Privacy" asp-controller="Home">
+                <span class="glyphicon glyphicon-book"></span> Search Books
+            </button>
+        </li>
+        <li>
+            @Html.ActionLink("משתמש חדש", "Create", "MembershipUsers", null)
+        </li>
         <li class="two">@Html.ActionLink("משתמש קיים", "Login", "Account", null)</li>
         <li class="three">@Html.ActionLink("הוסף ספר", "Create", "Books", null)</li>
         <li class="four">@Html.ActionLink("חיפוש ספר", "Index", "Books", null)</li>

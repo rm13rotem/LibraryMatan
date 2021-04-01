@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryMatan.Models
 {
@@ -7,8 +8,14 @@ namespace LibraryMatan.Models
     {
         public int Id { get; set; }
         
+        [Required]
         public string UserNameText { get; set; }
+        [Required]
         public string UserIdentityNumber { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        [Required]
+        public string Email { get; set; }
 
         public string Role { get
             {

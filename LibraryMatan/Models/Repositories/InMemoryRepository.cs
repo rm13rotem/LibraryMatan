@@ -32,6 +32,7 @@ namespace LibraryMatan.Models
             db.Dispose();
         }
 
+
         public void SaveChanges()
         {
             db.SaveChanges();
@@ -46,6 +47,11 @@ namespace LibraryMatan.Models
                 _mylist = newList;
                 _lastCached = DateTime.UtcNow;
             }
+        }
+
+        public async Task RefreshIfStaleAsync(bool forceRefreshing)
+        {
+            await Task.Run(() => RefreshIfStale(forceRefreshing));
         }
 
         public IEnumerable<T> GetAll()

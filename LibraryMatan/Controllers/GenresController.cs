@@ -25,7 +25,7 @@ namespace LibraryMatan.Controllers
         // GET: Genres
         public async Task<IActionResult> Refresh()
         {
-            genreRepo.RefreshIfStale(true);
+            await genreRepo.RefreshIfStaleAsync(true);
             return RedirectToAction("Index");
         }
         // GET: Genres

@@ -53,13 +53,13 @@ namespace LibraryMatan.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserNameText,UserIdentityNumber,CreatedDateTime")] MembershipUser membershipUser)
+        public async Task<IActionResult> Create(MembershipUser membershipUser)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(membershipUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home");
             }
             return View(membershipUser);
         }
@@ -85,7 +85,7 @@ namespace LibraryMatan.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserNameText,UserIdentityNumber,CreatedDateTime")] MembershipUser membershipUser)
+        public async Task<IActionResult> Edit(int id, MembershipUser membershipUser)
         {
             if (id != membershipUser.Id)
             {
