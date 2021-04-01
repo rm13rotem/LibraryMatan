@@ -35,7 +35,7 @@ namespace LibraryMatan.Controllers
                 newBooks = newBooks.Where(x => x.Author.Contains(filter.Author)).ToList();
             else if (filter.GenreId > 0)
                 newBooks = newBooks.Where(x => x.GenreId == filter.GenreId).ToList();
-            else newBooks = newBooks.OrderBy(x=>x.RequestedTimes).ThenByDescending(x=>x.CreatedDateTime).Take(20).ToList();
+            else newBooks = newBooks.OrderByDescending(x=>x.RequestedTimes).ThenByDescending(x=>x.CreatedDateTime).Take(20).ToList();
             filter.Result = newBooks;
             var genres = genreRepository.GetAll().ToList();
             genres.Insert(0,new Genre() { Id = 0, GenreName = "ללא סינון" });
